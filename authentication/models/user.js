@@ -69,9 +69,9 @@ module.exports = mongoose.model('User', userSchema);
 // const ObjectId = mongodb.ObjectId;
 
 // class User {
-//   constructor(username, email, cart, id) {
+//   constructor(username, sending-email, cart, id) {
 //     this.name = username;
-//     this.email = email;
+//     this.sending-email = sending-email;
 //     this.cart = cart; // {items: []}
 //     this._id = id;
 //   }

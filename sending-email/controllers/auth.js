@@ -1,6 +1,17 @@
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const sendgridTransport = require('nodemailer-sendgrid-transport');
 
 const User = require('../models/user');
+
+const transporter = nodemailer.createTransport(
+  sendgridTransport({
+    auth: {
+      api_key:
+        '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'
+    }
+  })
+);
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash('error');
@@ -36,7 +47,7 @@ exports.postLogin = (req, res, next) => {
   User.findOne({ email: email })
     .then(user => {
       if (!user) {
-        req.flash('error', 'Invalid sending-email or password.');
+        req.flash('error', 'Invalid email or password.');
         return res.redirect('/login');
       }
       bcrypt
@@ -50,7 +61,7 @@ exports.postLogin = (req, res, next) => {
               res.redirect('/');
             });
           }
-          req.flash('error', 'Invalid sending-email or password.');
+          req.flash('error', 'Invalid email or password.');
           res.redirect('/login');
         })
         .catch(err => {
@@ -68,7 +79,10 @@ exports.postSignup = (req, res, next) => {
   User.findOne({ email: email })
     .then(userDoc => {
       if (userDoc) {
-        req.flash('error', 'E-Mail exists already, please pick a different one.');
+        req.flash(
+          'error',
+          'E-Mail exists already, please pick a different one.'
+        );
         return res.redirect('/signup');
       }
       return bcrypt
@@ -83,6 +97,15 @@ exports.postSignup = (req, res, next) => {
         })
         .then(result => {
           res.redirect('/login');
+          return transporter.sendMail({
+            to: email,
+            from: 'shop@node-complete.com',
+            subject: 'Signup succeeded!',
+            html: '<h1>You successfully signed up!</h1>'
+          });
+        })
+        .catch(err => {
+          console.log(err);
         });
     })
     .catch(err => {

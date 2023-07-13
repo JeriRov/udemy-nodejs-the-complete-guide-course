@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  name: {
+  email: {
     type: String,
     required: true
   },
-  email: {
+  password: {
     type: String,
     required: true
   },
@@ -69,9 +69,9 @@ module.exports = mongoose.model('User', userSchema);
 // const ObjectId = mongodb.ObjectId;
 
 // class User {
-//   constructor(username, sending-email, cart, id) {
+//   constructor(username, email, cart, id) {
 //     this.name = username;
-//     this.sending-email = sending-email;
+//     this.email = email;
 //     this.cart = cart; // {items: []}
 //     this._id = id;
 //   }
